@@ -25,3 +25,6 @@ audioStream.ondataavailable = () => {
 
   renderer.render(scene, camera);
 };
+
+// Add CORS headers
+document.querySelector('script').setAttribute('crossorigin', '*');
