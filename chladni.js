@@ -27,4 +27,4 @@ audioStream.ondataavailable = () => {
 };
 
 // Add CORS headers
-document.querySelector('script').setAttribute('crossorigin', '*');
+header('Access-Control-Allow-Origin', '*');
