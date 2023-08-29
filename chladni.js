@@ -28,3 +28,4 @@ audioStream.ondataavailable = () => {
 
 // Add CORS headers
 header('Access-Control-Allow-Origin', '*');
+header('X-Content-Type-Options', 'sniff');
