@@ -1,0 +1,67 @@
+// Import the necessary libraries
+import * as THREE from 'three';
+
+// Set up the scene, camera, and renderer
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Define the parameters for the Chladnian figure
+const m = [1, 2, 3, 4, 5, 6, 7, 8];
+
+// Function to compute a point on the surface
+function evalPoint(theta, phi, m) {
+  let r = 0;
+  const p = new THREE.Vector3();
+
+  r += Math.pow(Math.sin(m[0] * phi), m[1]);
+  r += Math.pow(Math.cos(m[2] * phi), m[3]);
+  r += Math.pow(Math.sin(m[4] * theta), m[5]);
+  r += Math.pow(Math.cos(m[6] * theta), m[7]);
+
+  p.x = r * Math.sin(phi) * Math.cos(theta);
+  p.y = r * Math.cos(phi);
+  p.z = r * Math.sin(phi) * Math.sin(theta);
+
+  return p;
+}
+
+// Function to update the Chladnian figure
+function updateChladnianFigure() {
+  // Clear the scene
+  scene.clear();
+
+  // Calculate the eight most significant overtones from the spectral analysis of the sound
+  const overtones = calculateOvertones();
+
+  // Generate the Chladnian figure
+  for (let theta = 0; theta <= Math.PI; theta += 0.1) {
+    for (let phi = 0; phi <= 2 * Math.PI; phi += 0.1) {
+      const point = evalPoint(theta, phi, overtones);
+
+      // Create a sphere at the computed point
+      const geometry = new THREE.SphereGeometry(0.1);
+      const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.copy(point);
+      scene.add(sphere);
+    }
+  }
+
+  // Render the scene
+  renderer.render(scene, camera);
+
+  // Call the update function again
+  requestAnimationFrame(updateChladnianFigure);
+}
+
+// Function to calculate the eight most significant overtones from the spectral analysis of the sound
+function calculateOvertones() {
+  // TODO: Implement the spectral analysis and calculate the overtones
+  // Return an array of the eight most significant overtones
+}
+
+// Call the update function to start rendering the Chladnian figure
+updateChladnianFigure();
